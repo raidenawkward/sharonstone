@@ -1,0 +1,46 @@
+[User Manage]
+用户管理
+(姓名, 队别, 角色)
+
+1. 角色管理(
+	'领取人',
+	'换装人',
+	'交回人',
+	'责任人’
+	'问题分析人',
+	'订单下达人')
+
+2. 权限管理(
+	'视频分析人员'
+	'司机'
+	'领导')
+
+[HD Manage]
+硬盘管理
+(编号)
+
+[Video Manage]
+视频管理
+({硬盘}, 编号, 名称)
+
+[Train Manage]
+列车管理
+(机型, 型号, 所属车队)
+
+[Train Number Manage]
+车次管理
+({列车}, 车次, 责任人)
+
+[Blame Manage]
+定责管理
+(红牌:A, 黄牌:B, 白牌:C, 批评教育:D)
+
+[Analyzing Point]
+分析问题项点
+树形结构
+
+[Order Form Manage]
+订单管理
+
+[Record Manage]
+记录管理
