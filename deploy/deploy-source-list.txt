@@ -1,0 +1,5 @@
+For developping, this project requires ENV and tools below:
+
+mysql-installer-community-5.6.11.0
+dotNetFx40_Full_x86_x64
+qt-windows-opensource-5.0.2-mingw47_32-x86-offline
