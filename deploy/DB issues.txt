@@ -1,0 +1,74 @@
+[ODBC]
+1、安装QT Libraries 4.7.3 for windows(到NOKIA QT官网去下载qt-win-opensource-4.7.3-mingw.exe）
+2、安装完成后，在目录C:\Qt\4.7.3\plugins\sqldrivers下找到ODBC的4个驱动文件；
+3、在个人QT工程的目标程序目录下建立文件夹sqldrivers,并将这4个驱动文件放进去
+(本人所存放路径D:\DEMO\demo-build-desktop\debug\sqldrivers\，供大家参考，注意：文件夹名字一定要是sqldrivers)
+
+
+[MYSQL driver for qt5]
+http://wenku.baidu.com/view/2e64f9462b160b4e767fcf42.html
+QT5.0 MINGW4.7 编译MYSQL驱动.doc
+
+
+[MYSQL driver for qt4]
+	qt由于授权许可的限制，Qt的开源版本没有提供所有数据库的驱动程序。
+免费下载的中只含有QSQLITE也就是SQLite的驱动程序，要想与mysql或oracle等连
+接需要自己编译其驱动。
+    由于种种问题，经历各种重装，各种失败，本人用了两天才成功用qt连接
+上了mysql数据库。（看网上其他教程都是分分钟搞定  -_-!!） 在这里也写一下自
+己的经历。
+
+下边开始正文：
+    一.下载mysql http://dev.mysql.com/downloads/ 目前最新版本5.5。
+
+    二.安装mysql  安装时不能选择Typical型，这样会缺少库文件（include
+和lib文件夹）。啥都不管直接选择FUll型。
+
+    三.将mysql安装目录下的include和lib两个文件夹拷贝到
+qt\4.7.4\src\plugins\sqldrivers\mysql下。可以自己新建一个目录如mysqllib。
+
+    四.修改mysql.pro文件，在第二行添加如下内容
+          INCLUDEPATH += "./mysqllib/include"
+    LIBS+= "./mysqllib/lib/libmysql.lib"
+
+    五.将QT的bin目录和mingw的目录都添加到环境变量的path中。
+
+    六.运行qt 4.7.4 Command Prompt 输入以下命令（路径自己注意修改） 
+        cd qt\4.7.4\src\plugins\sqldrivers\mysql
+        qmake
+        mingw32-make release
+        mingw32-make debug
+       执行qmake后没有返回结果，只是在mysql目录下生成了debug和release的
+makefile文件Makefile.Debug和Makefile.Release。 
+       全部执行完后，将release下的libqsqlmysql4.a,qsqlmysql4.dll和debug下
+的libqsqlmysqld4.a,libqsqlmysqld4.dll 拷贝至
+       QtSDK\Desktop\Qt\4.7.4\mingw\plugins\sqldrivers
+    目录下
+
+   七.将mysql的库文件libmysql.dll拷贝到QtSDK\Desktop\Qt\4.7.4\mingw\bin 
+目录下
+
+接下来运行一个例子看驱动是否装好： 
+新建一个qt gui 控制台项目SQLtest
+在SQLtest.pro中加入QT  +=sql
+接着修改main.cpp如下
+  
+#include <QtCore/QCoreApplication> 
+#include <QtSql> 
+int main(int argc, char *argv[]) 
+{ 
+    QCoreApplication a(argc, argv); 
+    qDebug() << "Available drivers:"; 
+       QStringList drivers = QSqlDatabase::drivers(); 
+       foreach(QString driver, drivers) 
+           qDebug() << "\t "<< driver; 
+    qDebug() << "End"; 
+    return a.exec(); 
+} 
+执行程序输出为： 
+Available drivers: 
+        "QSQLITE" 
+        "QMYSQL3" 
+        "QMYSQL" 
+End 
+其中有"QMYSQL"则表示编译mysql的驱动成功了
