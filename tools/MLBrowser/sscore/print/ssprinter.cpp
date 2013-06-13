@@ -46,7 +46,7 @@ bool SSPrinter::onPrint()
     if (!_printImpl)
         return false;
 
-    return _printImpl->print();
+    return _printImpl->startPrint();
 }
 
 void SSPrinter::onPrintDone()

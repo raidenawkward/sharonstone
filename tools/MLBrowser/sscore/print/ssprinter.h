@@ -1,7 +1,6 @@
 #ifndef SSPRINTER_H
 #define SSPRINTER_H
 
-#include "ssprintable.h"
 #include "ssprintimpl.h"
 
 class SSPrinter

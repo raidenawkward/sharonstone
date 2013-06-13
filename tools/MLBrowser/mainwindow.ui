@@ -40,7 +40,7 @@
        <number>5</number>
       </property>
       <item>
-       <widget class="QTextBrowser" name="textBrowser">
+       <widget class="TempletePrintingBrowser" name="printingBrowser">
         <property name="font">
          <font>
           <pointsize>16</pointsize>
@@ -138,6 +138,13 @@
   </action>
  </widget>
  <layoutdefault spacing="6" margin="11"/>
+ <customwidgets>
+  <customwidget>
+   <class>TempletePrintingBrowser</class>
+   <extends>QTextBrowser</extends>
+   <header>templeteprintingbrowser.h</header>
+  </customwidget>
+ </customwidgets>
  <resources>
   <include location="mlsource.qrc"/>
  </resources>

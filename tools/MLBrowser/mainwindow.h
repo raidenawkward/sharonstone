@@ -3,7 +3,10 @@
 
 #include <QMainWindow>
 #include <QString>
-#include <QtPrintSupport/QPrinter>
+#include <QPrinter>
+
+#include "sscore/print/ssprinter.h"
+
 
 namespace Ui {
 class MainWindow;
@@ -22,7 +25,6 @@ public:
     void print();
 
 private slots:
-    void onPreviewRequest(QPrinter* printer);
     void on_actionAbout_triggered();
     void on_actionOpen_triggered();
     void on_actionRefresh_triggered();
@@ -34,7 +36,7 @@ private slots:
 private:
     Ui::MainWindow *ui;
     QString _file;
-    QPrinter* _printer;
+    SSPrinter* _printer;
 };
 
 #endif // MAINWINDOW_H

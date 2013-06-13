@@ -14,16 +14,18 @@ TEMPLATE = app
 
 SOURCES += main.cpp\
         mainwindow.cpp \
-    print/ssprinter.cpp \
+    sscore/print/ssprinter.cpp \
     testprintclass.cpp \
-    templeteprinterimpl.cpp
+    sscore/sstemplete.cpp \
+    templeteprintingbrowser.cpp
 
 HEADERS  += mainwindow.h \
-    print/ssprintable.h \
-    print/ssprintimpl.h \
-    print/ssprinter.h \
+    sscore/print/ssprintable.h \
+    sscore/print/ssprintimpl.h \
+    sscore/print/ssprinter.h \
     testprintclass.h \
-    templeteprinterimpl.h
+    sscore/sstemplete.h \
+    templeteprintingbrowser.h
 
 FORMS    += mainwindow.ui
 
