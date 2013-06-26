@@ -6,6 +6,8 @@
 #include <QFontDialog>
 #include <QFile>
 #include <QRegularExpression>
+#include <QDebug>
+#include <string.h>
 
 TempletePrintingBrowser::TempletePrintingBrowser(QWidget *parent) :
     QTextBrowser(parent)
@@ -23,9 +25,41 @@ TempletePrintingBrowser::~TempletePrintingBrowser()
         delete _printer;
 }
 
-bool TempletePrintingBrowser::loadPrintable(const SSPrintable* printable)
+bool TempletePrintingBrowser::loadPrintable(SSPrintable* printable)
 {
     _printable = printable;
+
+    if (!_printable)
+        return false;
+
+    _printable->traversePrintable(this);
+
+    clearAllTags();
+
+    this->setHtml(_templeteContent);
+
+    return true;
+}
+
+bool TempletePrintingBrowser::onPrintablePrint(int ,string title, string v)
+{
+    QString tag = QString(title.c_str());
+    QString value = QString(v.c_str());
+
+    qDebug()<<"tag: "<<tag<<" value: "<<value;
+
+    if (title.empty())
+        return true;
+
+    if (!tag.contains(".")) {
+        setTagValue(tag.toUtf8().constData(), value.toUtf8().constData());
+    } else {
+        int dotIndex = tag.indexOf(".");
+        QString tagInTemplete = tag.mid(0, dotIndex);
+
+        appendTagValue(tagInTemplete.toStdString(), value.toStdString());
+        appendTagValue(tagInTemplete.toStdString(), "<br>");
+    }
 
     return true;
 }
@@ -33,9 +67,9 @@ bool TempletePrintingBrowser::loadPrintable(const SSPrintable* printable)
 /*
  * methods from SSTemplete
  */
-bool TempletePrintingBrowser::loadTemplete(const char* path)
+bool TempletePrintingBrowser::loadTemplete(string path)
 {
-    QFile file(path);
+    QFile file(path.c_str());
 
     if (!file.open(QFile::ReadOnly)) {
         return false;
@@ -48,59 +82,64 @@ bool TempletePrintingBrowser::loadTemplete(const char* path)
     return true;
 }
 
-bool TempletePrintingBrowser::setTagValue(const char* tag, const char* value)
+bool TempletePrintingBrowser::setTagValue(string tag, string value)
 {
     QString before;
-    before.append(_tagPrefix).append(QString(tag)).append(_tagSuffix);
+    before.append(_tagPrefix).append(QString(tag.c_str())).append(_tagSuffix);
 
-    _templeteContent.replace(before, QString(value));
+    _templeteContent.replace(before, QString(value.c_str()));
 
     return true;
 }
 
-bool TempletePrintingBrowser::appendTagValue(const char* tag, const char* value)
+bool TempletePrintingBrowser::appendTagValue(string tag, string value)
 {
     QString before;
-    before.append(_tagPrefix).append(QString(tag)).append(_tagSuffix);
+    before.append(_tagPrefix).append(QString(tag.c_str())).append(_tagSuffix);
 
-    QString after = QString(value) + before;
+    QString after = QString(value.c_str()) + before;
 
     _templeteContent.replace(before, after);
 
     return true;
 }
 
-bool TempletePrintingBrowser::isTagExist(const char* tag)
+bool TempletePrintingBrowser::isTagExist(string tag)
 {
     QString tagStr;
-    tagStr.append(_tagPrefix).append(QString(tag)).append(_tagSuffix);
+    tagStr.append(_tagPrefix).append(QString(tag.c_str())).append(_tagSuffix);
 
     return _templeteContent.contains(tagStr);
 }
 
-const char* TempletePrintingBrowser::getNextTag()
+string TempletePrintingBrowser::getNextTag()
 {
     return NULL;
 }
 
 void TempletePrintingBrowser::clearAllTags()
 {
-    QString expStr;
-    expStr.append(_tagPrefix).append("*").append(_tagSuffix);
+    while(_templeteContent.contains(_tagPrefix)) {
+        int start = _templeteContent.indexOf(_tagPrefix);
+        if (start < 0)
+            break;
 
-    QRegularExpression exp(expStr);
+        int end = _templeteContent.indexOf(_tagSuffix, start);
+        if (end < 0)
+            break;
 
-    _templeteContent.replace(exp, "");
+        _templeteContent.replace(start, end - start + 1, "");
+    }
 }
 
-void TempletePrintingBrowser::setTagPrefix(const char* prefix)
+void TempletePrintingBrowser::setTagPrefix(string prefix)
 {
-    _tagPrefix = QString(prefix);
+    _tagPrefix = QString(prefix.c_str());
 }
 
-void TempletePrintingBrowser::setTagSuffix(const char* suffix)
+void TempletePrintingBrowser::setTagSuffix(string suffix)
 {
-    _tagSuffix = QString(suffix);
+    _tagSuffix = QString(suffix.c_str());
 }
 
 /*
@@ -108,25 +147,18 @@ void TempletePrintingBrowser::setTagSuffix(const char* suffix)
  */
 bool TempletePrintingBrowser::preparePrint()
 {
-    if (_printer)
-        delete _printer;
-
-    _printer = new QPrinter();
-    _printer->setPageSize(QPrinter::A4);
-    _printer->setPageMargins(0, 0, 0, 0, QPrinter::Millimeter);
+    if (!_printer) {
+        _printer = new QPrinter();
+        _printer->setPageSize(QPrinter::A4);
+        _printer->setPageMargins(0, 0, 0, 0, QPrinter::Millimeter);
+    }
 
     return true;
 }
 
-bool TempletePrintingBrowser::startPrint()
+bool TempletePrintingBrowser::printDoc()
 {
     if (!_printer)
-        return false;
-
-    QPrintDialog dialog(_printer, 0);
-    dialog.setModal(true);
-
-    if (dialog.exec() != QDialog::Accepted)
         return false;
 
     this->print(_printer);
@@ -144,11 +176,34 @@ void TempletePrintingBrowser::onPreviewRequest(QPrinter* printer)
     this->print(printer);
 }
 
-void TempletePrintingBrowser::preview()
+bool TempletePrintingBrowser::preparePreview()
+{
+    return preparePrint();
+}
+
+bool TempletePrintingBrowser::preview()
 {
     QPrintPreviewDialog dialog(_printer, 0);
     dialog.setModal(true);
 
     connect(&dialog, SIGNAL(paintRequested(QPrinter *)), this, SLOT(onPreviewRequest(QPrinter *)));
     dialog.exec();
+
+    return true;
+}
+
+void TempletePrintingBrowser::finishPreview()
+{
+
+}
+
+bool TempletePrintingBrowser::openOptionDialog()
+{
+    if (!_printer)
+        preparePrint();
+
+    QPrintDialog dialog(_printer, 0);
+    dialog.setModal(true);
+
+    return dialog.exec() == QDialog::Accepted;
 }

@@ -17,7 +17,8 @@ SOURCES += main.cpp\
     sscore/print/ssprinter.cpp \
     testprintclass.cpp \
     sscore/sstemplete.cpp \
-    templeteprintingbrowser.cpp
+    templeteprintingbrowser.cpp \
+    testprintclassprintable.cpp
 
 HEADERS  += mainwindow.h \
     sscore/print/ssprintable.h \
@@ -25,7 +26,8 @@ HEADERS  += mainwindow.h \
     sscore/print/ssprinter.h \
     testprintclass.h \
     sscore/sstemplete.h \
-    templeteprintingbrowser.h
+    templeteprintingbrowser.h \
+    testprintclassprintable.h
 
 FORMS    += mainwindow.ui
 

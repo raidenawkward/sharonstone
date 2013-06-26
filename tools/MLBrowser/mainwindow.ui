@@ -71,6 +71,8 @@
     <addaction name="actionPrint"/>
     <addaction name="actionPreview"/>
     <addaction name="separator"/>
+    <addaction name="actionTest"/>
+    <addaction name="separator"/>
     <addaction name="actionExit"/>
    </widget>
    <widget class="QMenu" name="menu_2">
@@ -134,6 +136,11 @@
   <action name="actionFont">
    <property name="text">
     <string>字体...</string>
+   </property>
+  </action>
+  <action name="actionTest">
+   <property name="text">
+    <string>装载测试结构</string>
    </property>
   </action>
  </widget>

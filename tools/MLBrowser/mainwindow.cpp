@@ -3,6 +3,8 @@
 #include "sscore/print/ssprintable.h"
 #include "sscore/print/ssprintimpl.h"
 #include "sscore/print/ssprinter.h"
+#include "testprintclass.h"
+#include "testprintclassprintable.h"
 
 #include <QFileDialog>
 #include <QFontDialog>
@@ -58,6 +60,9 @@ void MainWindow::on_actionPrint_triggered()
     if (!_printer)
         return;
 
+    if (!_printer->openOptionDialog())
+        return;
+
     _printer->print();
 }
 
@@ -84,4 +89,12 @@ void MainWindow::on_actionFont_triggered()
         return;
 
     ui->printingBrowser->setFont(font);
+}
+
+void MainWindow::on_actionTest_triggered()
+{
+    TestPrintClass* testClass = TestPrintClass::create();
+    TestPrintClassPrintable *testClassPrintable = new TestPrintClassPrintable(testClass);
+
+    ui->printingBrowser->loadPrintable(testClassPrintable);
 }

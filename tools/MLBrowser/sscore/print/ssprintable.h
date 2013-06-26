@@ -1,15 +1,26 @@
 #ifndef SSPRINTABLE_H
 #define SSPRINTABLE_H
 
+#include <stdlib.h>
+#include <string>
+
+using namespace std;
+
 class SSPrintable
 {
 public:
-    virtual const char* getPrintableName() const = 0;
-    virtual int getPrintableItemCount() = 0;
 
-    virtual const char* getPrintableItemName(int index) = 0;
-    virtual const char* getPrintableItemValue(int index) = 0;
-    virtual const char* getPrintableItemValue(const char* name) = 0;
+    class SSPrintableCallback {
+    public:
+        virtual bool onPrintablePrint(int type, string title, string value) = 0;
+    };
+
+    virtual bool traversePrintable(SSPrintableCallback* callback) { return callback; }
+
+    virtual string getPrintableItemTitle(int type, int index = -1) = 0;
+    virtual string getPrintableItemValue(int type, int index = -1) = 0;
+
+    virtual string getPrintableName() const = 0;
 
 protected:
     SSPrintable() {}

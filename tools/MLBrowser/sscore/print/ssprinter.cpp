@@ -15,6 +15,11 @@ SSPrinter::~SSPrinter()
 {
 }
 
+bool SSPrinter::openOptionDialog()
+{
+    return onOpenOptionDialog();
+}
+
 bool SSPrinter::print()
 {
     if (!onPrePrint())
@@ -23,14 +28,21 @@ bool SSPrinter::print()
     if (!onPrint())
         return false;
 
-    onPrintDone();
+    onFinishPrint();
 
     return true;
 }
 
 void SSPrinter::preview()
 {
-    onPreview();
+    if (!onPrePreview())
+        return;
+
+    if (!onPreview())
+        return;
+
+    onFinishPreview();
+
 }
 
 bool SSPrinter::onPrePrint()
@@ -46,10 +58,10 @@ bool SSPrinter::onPrint()
     if (!_printImpl)
         return false;
 
-    return _printImpl->startPrint();
+    return _printImpl->printDoc();
 }
 
-void SSPrinter::onPrintDone()
+void SSPrinter::onFinishPrint()
 {
     if (!_printImpl)
         return;
@@ -57,12 +69,36 @@ void SSPrinter::onPrintDone()
     _printImpl->fihishPrint();
 }
 
-void SSPrinter::onPreview()
+bool SSPrinter::onPrePreview()
+{
+    if (!_printImpl)
+        return false;
+
+    return _printImpl->preparePreview();
+}
+
+bool SSPrinter::onPreview()
+{
+    if (!_printImpl)
+        return false;
+
+    return _printImpl->preview();
+}
+
+void SSPrinter::onFinishPreview()
 {
     if (!_printImpl)
         return;
 
-    _printImpl->preview();
+    _printImpl->finishPreview();
+}
+
+bool SSPrinter::onOpenOptionDialog()
+{
+    if (!_printImpl)
+        return false;
+
+    return _printImpl->openOptionDialog();
 }
 
 SSPrintImpl* SSPrinter::getPrintImpl()

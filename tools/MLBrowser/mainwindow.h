@@ -32,6 +32,7 @@ private slots:
     void on_actionPreview_triggered();
     void on_actionExit_triggered();
     void on_actionFont_triggered();
+    void on_actionTest_triggered();
 
 private:
     Ui::MainWindow *ui;

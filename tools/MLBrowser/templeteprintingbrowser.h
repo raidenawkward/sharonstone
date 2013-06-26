@@ -14,35 +14,45 @@
 #define TEMPLETEPRINTINGBROWSER_DEFAULT_TAG_SUFFIX ("}")
 
 
-class TempletePrintingBrowser : public QTextBrowser, public SSTemplete, public SSPrintImpl
+class TempletePrintingBrowser : public QTextBrowser, public SSTemplete, public SSPrintImpl, SSPrintable::SSPrintableCallback
 {
     Q_OBJECT
 public:
     explicit TempletePrintingBrowser(QWidget *parent = 0);
     virtual ~TempletePrintingBrowser();
 
-    bool loadPrintable(const SSPrintable* printable);
-
     /*
      * methods from SSTemplete
      */
-    virtual bool loadTemplete(const char* path);
-    virtual bool setTagValue(const char* tag, const char* value);
-    virtual bool appendTagValue(const char* tag, const char* value);
-    virtual bool isTagExist(const char* tag);
-    virtual const char* getNextTag();
+    virtual bool loadTemplete(string path);
+    virtual bool setTagValue(string tag, string value);
+    virtual bool appendTagValue(string tag, string value);
+    virtual bool isTagExist(string tag);
+    virtual string getNextTag();
     virtual void clearAllTags();
 
-    virtual void setTagPrefix(const char* prefix);
-    virtual void setTagSuffix(const char* suffix);
+    virtual void setTagPrefix(string prefix);
+    virtual void setTagSuffix(string suffix);
 
     /*
      * methods from SSPrintImpl
      */
     virtual bool preparePrint();
-    virtual bool startPrint();
+    virtual bool printDoc();
     virtual void fihishPrint();
-    virtual void preview();
+
+    virtual bool preparePreview();
+    virtual bool preview();
+    virtual void finishPreview();
+
+    virtual bool openOptionDialog();
+
+    virtual bool loadPrintable(SSPrintable* printable);
+
+    /*
+     * method from SSPrintableCallback
+     */
+    virtual bool onPrintablePrint(int, string title, string value);
 
 private slots:
     void onPreviewRequest(QPrinter* printer);
@@ -52,7 +62,7 @@ private:
     QString _tagPrefix;
     QString _tagSuffix;
 
-    const SSPrintable* _printable;
+    SSPrintable* _printable;
 
     QPrinter *_printer;
 };
