@@ -1,0 +1,12 @@
+/*
+ * [INTERFACE]
+ * factory for database connection
+ */
+
+
+class DatabaseFactory {
+public:
+	virtual static Database* produce() = 0;
+	/// returns the instance created by produce() last time
+	virtual static Database* instance() = 0;
+};

@@ -1,0 +1,27 @@
+/*
+ * INTERFACE
+ * for data visit query executing
+ * based on certain platform
+ */
+
+class DataVisitCmd {
+
+public:
+	virtual bool exec() = 0;
+
+	virtual void setQuery(string query) { _query = query; }
+	virtual string getQuery() { return _query; }
+
+	virtual vector<DataProvider> result() = 0;
+	virtual int getResultCount() = 0;
+
+	virtual setDatabase(DataBase* db) { _db = db; }
+	virtual Database* getDatabase() { return _db; }
+
+protected:
+	DataVisitCmd() {}
+
+private:
+	DataBase* _db;
+	string _query;
+};

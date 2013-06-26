@@ -1,0 +1,27 @@
+/*
+ * [INTERFACE]
+ * for data base connection
+ * a database could be database services, file system and so on
+ */
+
+class Database {
+
+public:
+	virtual bool connect() = 0;
+	virtual bool open() = 0;
+	virtual void close() = 0;
+
+	virtual bool isConnected() = 0;
+	virtual bool isOpened() = 0;
+
+	virtual string error() = 0;
+
+	virtual void setName(string name) = 0;
+	virtual string getName() = 0;
+
+	virtual void* databaseInfo() = 0;
+
+protected:
+	DataBase() {}
+};
+

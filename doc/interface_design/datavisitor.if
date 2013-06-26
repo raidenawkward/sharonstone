@@ -1,0 +1,31 @@
+/*
+ * [INTERFACE]
+ * provides add, delete, update and select
+ * for sql like, or other data restoring system
+ */
+
+typedef DataProvider VisitCondition;
+
+class DataVisitor {
+
+public:
+	/// data operations
+	virtual bool add(VisitCondition* dest) = 0;
+	virtual bool delete(VisitCondition* cond) = 0;
+	virtual bool update(VisitCondition* cond, VisitCondition* dest) = 0;
+	// will select all if cond == NULL
+	virtual vector<DataProvider> select(VisitCondition* cond = NULL) = 0;
+	virtual int count(VisitCondition* cond = NULL) = 0;
+	// may be similar to select()
+	virtual bool exist(VisitCondition* dest) = 0;
+
+	virtual string error() = 0;
+
+	Database* getDatabase() { return _db; }
+
+protected:
+	DataVisitor(Database* db) { _db = db; }
+
+private:
+	Database* _db;
+};

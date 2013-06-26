@@ -1,0 +1,16 @@
+/*
+ * [INTERFACE]
+ * factory for data visitor
+ * may use singleton pattern
+ */
+
+
+class DataVisitorFactory {
+
+public:
+	virtual static DataVisitor* produce(DatabaseFactory* dbFactory) = 0;
+
+	/// returns the instance created by produce() last time
+	virtual static DataVisitor* instance() = 0;
+};
+
