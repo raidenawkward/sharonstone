@@ -1,4 +1,4 @@
-/*
+/**
  * [INTERFACE]
  * factory for database connection
  */

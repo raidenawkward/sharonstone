@@ -1,4 +1,4 @@
-/*
+/**
  * [INTERFACE]
  * factory for data visitor
  * may use singleton pattern

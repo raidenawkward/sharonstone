@@ -1,4 +1,4 @@
-/*
+/**
  * [INTERFACE]
  * for data base connection
  * a database could be database services, file system and so on

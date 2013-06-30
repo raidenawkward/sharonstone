@@ -15,16 +15,23 @@ TEMPLATE = app
 SOURCES += main.cpp\
         mainwindow.cpp \
     odbcdatabase.cpp \
-    qtdatavisitor.cpp
+    sscore/print/ssprinter.cpp \
+    qtsqlcondition.cpp \
+    qtsqldbvisitor.cpp
 
 HEADERS  += mainwindow.h \
     sscore/data/ssdatabase.h \
     odbcdatabase.h \
     sscore/data/ssdatavisitor.h \
     sscore/data/ssdataprovider.h \
-    qtdatavisitor.h \
     sscore/data/ssdatabasefactory.h \
     sscore/data/ssdatavisitorfactory.h \
-    sscore/data/ssdatavisitcmd.h
+    sscore/data/ssdatavisitcmd.h \
+    sscore/print/ssprintimpl.h \
+    sscore/print/ssprinter.h \
+    sscore/print/ssprintable.h \
+    sscore/data/ssvisitcondition.h \
+    qtsqlcondition.h \
+    qtsqldbvisitor.h
 
 FORMS    += mainwindow.ui
